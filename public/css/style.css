@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2019-09-25 15:35:22
 * @Last Modified by:   Marte
-* @Last Modified time: 2019-10-28 15:34:17
+* @Last Modified time: 2019-11-01 11:00:26
 */
 /*// 滚动条宽度*/
 /**::-webkit-scrollbar{width:8px;height:8px;border-radius:10px;background: #ddd;}*/
@@ -43,13 +43,14 @@ body,h1, h2, h3, h4, h5, h6,li ,input, button, select, textarea,a { font-size:16
 .el-dropdown,
 .el-submenu__title,
 .el-dropdown-menu__item{font-size: 16px;}
-
+.animate-box{transition: all .3s;}
 .p16{padding: 16px;} .pl16{padding-left: 16px;} .pr16{padding-right: 16px;} .pt16{padding-top: 16px;} .pb16{padding-bottom: 16px;}
 
 /*=======================================================================================*/
 .ivu-layout-sider{border-radius: 0 0 10px 0;}
 .ivu-layout-header{padding: 0 20px;}
 .el-menu{background: none;}
+.el-menu--vertical .el-menu{background: #fff;box-shadow: 3px 3px 6px #ccc;}
 .el-menu.el-menu--horizontal{border-bottom: none;}
 .el-menu-item.is-disabled{opacity: .5;}
 /*头部导航默认文字颜色*/
@@ -61,6 +62,8 @@ body,h1, h2, h3, h4, h5, h6,li ,input, button, select, textarea,a { font-size:16
 .el-menu--horizontal .el-menu .el-menu-item:hover, .el-menu--horizontal .el-menu .el-submenu__title:hover,
 .el-menu--horizontal .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal .el-menu-item:not(.is-disabled):hover{color:#00a4ff;}
 .el-main{padding: 0;}
+.el-main.page-children{padding-left: 20px;}
+.el-main.page-children > * {width:calc(100% - 20px);}
 /*.el-main > *{width:calc(100% - 16px);box-sizing: border-box;}*/
 .el-header{background-color: #545c64;padding: 0 20px;}
 .el-submenu{transition: all .2s;}
@@ -75,7 +78,7 @@ body,h1, h2, h3, h4, h5, h6,li ,input, button, select, textarea,a { font-size:16
 .is-active > .el-submenu__title  i {color: #fff; }
 .el-dropdown-link{height: 60px;display: block;padding-left: 56px;position: relative;color:#fff;line-height: 60px;}
 .el-dropdown-link:before{content:"";position: absolute;top: 10px;left: 10px;width: 40px;height: 40px;background: rgba(255,255,255,.8);border-radius: 50%;}
-
+.el-tabs__header{margin-bottom: 10px;}
 #chiPage{width: calc(100% - 32px);margin-left: 16px;box-sizing: border-box;}
 /*解决界面渲染闪一下VUE方案*/
 [v-cloak]{display: none;}
@@ -84,9 +87,11 @@ body,h1, h2, h3, h4, h5, h6,li ,input, button, select, textarea,a { font-size:16
 .h100pc48.el-table--scrollable-x .el-table__body-wrapper { height: calc(100% - 48px); }
 /*.loadBefore:before{content:"";position: fixed;top: 0;left: 0;bottom: 0;right: 0;background: #fff;transition: all .3s;z-index: 1000000000000;}*/
 /*.loadBefore.on:before{opacity: 0;}*/
+/*普通表格头部背景颜色start*/
+.el-table thead.has-gutter th{background: #F5F7FA;}
+/*普通表格头部背景颜色end*/
 
 /*index子页样式*/
-
 .index-page.el-row {margin-bottom: 20px; }
 .index-page.el-row:last-child {margin-bottom: 0; }
 .index-page.el-col {border-radius: 4px; }
@@ -97,18 +102,19 @@ body,h1, h2, h3, h4, h5, h6,li ,input, button, select, textarea,a { font-size:16
 .index-page.row-bg {padding: 10px 0; background-color: #f9fafc; }
 .index-page.grid-c-title{text-align: center;padding-top: 10px;color:#fff;}
 .index-page.grid-c-number{font-size: 32px;text-align: center;padding-bottom: 6px;color:#fff;}
-
-
-
-
-
-
-
 /*index子页样式*/
 
-
-
-
+/*左侧伸缩样式start*/
+.el-aside{position: relative;overflow: initial;box-shadow: 0px 6px 6px #ccc;border-radius: 0 20px 0 0;}
+.el-aside .el-menu-vertical-demo{border-radius: 0 20px 0 0;}
+.el-aside > .el-radio-group{margin-bottom: 0;position: absolute; top: calc(50% - 25px); right: -19px;z-index: 2;}
+span.el-radio-button__inner{width: 20px; box-sizing: border-box; padding: 10px 0; display: block; white-space: inherit; line-height: 16px; border-radius: 0 8px 8px 0 !important;border-left: none !important;}
+/*左侧伸缩样式end*/
+/*分页位置调整样式start*/
+.el-pagination{padding: 0;}
+.el-pagination > .el-pagination__total,
+.el-pagination > .el-pagination__sizes{float: right; margin-right: 0; margin-left: 10px;}
+/*分页位置调整样式end*/
 
 
 

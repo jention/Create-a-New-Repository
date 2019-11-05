@@ -39,8 +39,6 @@
         export default {
             data(){
                 return {
-                    parPage : null,
-                    bodyClass : '',
                     message: '这是默认首页',
                     parViewHei : 0
                 }

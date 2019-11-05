@@ -74,20 +74,9 @@
                 },
                 chiFun(){
                     this.$message('你进入了list1');
-                },
-                getParDoc(){    //获取父页面vue示例
-                    // this.parPage = window.parent.app;
-                    // 以下实时同步iframe视口大小
-                    // this.parViewHei = this.parPage.viewHei;
-                    // window.onresize = () => {
-                        // this.parViewHei = this.parPage.viewHei;
-                    // }
-
-                    // this.parPage.getChiDoc();//执行父页面方法
                 }
             },
             mounted(){
-                // this.getParDoc();
                 
             }
         }

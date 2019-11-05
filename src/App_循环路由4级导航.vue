@@ -15,12 +15,35 @@
                     <el-menu router :default-active="$route.path" ref="headerNav" class="el-menu-demo"mode="horizontal"@select="handleSelect">
                         <template v-for="(item,index) in $router.options.routes">
                             
-                            <el-submenu v-if="item.children != undefined" :index="index+''" :key="item.name" >
+                            <el-submenu v-if="item.children != undefined" :index="index=''" :key="item.name" >
                                 <template slot="title">{{ item.name }}</template>
                                 <!-- 二级start -->
                                 <template v-for="itChi in item.children">
-                                    
-                                    <el-menu-item :index="item.path+'/'+itChi.path" :key="itChi.name" >{{ itChi.name }}</el-menu-item>
+                                    <el-submenu v-if="itChi.children != undefined" :index="item.path+'/'+itChi.path" :key="itChi.name" >
+                                        <template slot="title">{{ itChi.name }}</template>
+                                        <!-- 三级start -->
+                                        <template v-for="itCchi in itChi.children">
+                                            <el-submenu v-if="itCchi.children != undefined" :index="item.path+'/'+itChi.path+'/'+itCchi.path" :key="itCchi.name" >
+                                                <template slot="title">{{ itCchi.name }}</template>
+
+                                                <!-- 四级start -->
+                                                <template v-for="itCcchi in itCchi.children">
+                                                    <el-submenu v-if="itCcchi.children != undefined" :index="item.path+'/'+itChi.path+'/'+itCchi.path+'/'+itCcchi.path" :key="itCcchi.name" >
+                                                        <template slot="title">{{ itCcchi.name }}</template>
+
+                                                        
+
+                                                    </el-submenu>
+                                                    <el-menu-item v-else :index="item.path+'/'+itChi.path+'/'+itCchi.path+'/'+itCcchi.path" :key="itCcchi.name" >{{ itCcchi.name }}</el-menu-item>
+                                                </template>
+                                                <!-- 四级end -->
+
+                                            </el-submenu>
+                                            <el-menu-item v-else :index="item.path+'/'+itChi.path+'/'+itCchi.path" :key="itCchi.name" >{{ itCchi.name }}</el-menu-item>
+                                        </template>
+                                        <!-- 三级end -->
+                                    </el-submenu>
+                                    <el-menu-item v-else :index="item.path+'/'+itChi.path" :key="itChi.name" >{{ itChi.name }}</el-menu-item>
                                 </template>
                                 <!-- 二级end -->
                             </el-submenu>
@@ -54,7 +77,7 @@
                   </el-tabs>
 
                 <!-- <iframe id="chiIframe" ref="chiIframe" name="chiIframe" :src="'page/'+tagActiveName+'.html'" height="100%" width="100%" border="0" frameborder="0"></iframe> -->
-                <router-view  ref="child"></router-view>
+                <router-view/>
 
             </el-main>
         </el-container>
@@ -65,7 +88,6 @@
 </template>
 
 <script>
-
     export default {
       data(){
         return {
@@ -89,7 +111,6 @@
         props: {
             msg: String
         },
-
         methods:{
             rouTo(o,data = {}){
                 this.$router.push({  //核心语句
@@ -105,94 +126,65 @@
             },
             handleSelect(key, keyPath) {   //头部菜单的点击事件
                 // 同步tag数据start
-                let key1 = this.vtp.returnRootPathStr(key);
-                let isTagData = this.vtp.fildata(this.tagList,key1,'headerNavJson');
-                let data = this.vtp.fildata(this.$router.options.routes,key1,'headerNavJson');
+                // let key1 = '/'+key.split('/')[0] 去除第几个字符串;
+                let key1 = this.vtp.getAfterStr(keyPath,1);
+                key1 = this.vtp.getAfterStr(keyPath,0);
+                let isTagData = this.vtp.fildata(this.tagList,key);
+                let data = this.vtp.fildata(this.$router.options.routes,key);
+                if(data[0] == null){data = this.vtp.fildata(this.$router.options.routes,key1); }
+                data = data[0];
                 if(isTagData[0] == null){
-                    let addData = {name:data[0].name,path:key1};
+                    let addData = {name:data.name,path:key};
                     this.tagList.push(addData)
                 }
-                this.vtp.rem('headerNavJson');
+                this.tagActiveName = key;
+                this.vtp.rem(isTagData[1]);
                 // 同步tag数据end
             },
              handleCommand(command) {   //人员下拉框的点击事件
                 this.$message('click on item ' + command);
             },
+            getChiDoc() {   //获取子页面vue示例
+                // alert();
+                setTimeout(function(){
+                    this.child = window.frames["chiIframe"].chiPage;
+                    // console.log(this.child)
+                    this.child.chiFun();
+                }, 100);
+            },
             removeTab(tag) {      //tag标签关闭
                 //页签关闭自动跳转首页页签start
                 this.tagList.splice(this.tagList.indexOf(tag), 1);
+                this.tagActiveName = '/index';
                 this.rouTo('/index');
                 //页签关闭自动跳转首页页签end
             },
             tagHandleClick(tab, event) {    //tag菜单点击事件
+                // console.log(tab.name);
                 // 头部导航同步tag页面切换start
-                let d =this.vtp.fildata(this.$router.options.routes,tab.name,'tabName');
-                this.rouTo(this.vtp.get('routerHoy')[d[2]]);
-                this.vtp.rem('tabName');
+                this.rouTo(tab.name);
                 // 头部导航同步tag页面切换end
                 // this.$message('你点击了：'+tab, event);
             },
             editTab(targetName, action){    //tabs页签变动触发事件
                 this.$message('你操作了TABS' + targetName);
             }
-        },
-        mounted(){
-
-            
-        },
-        created(){
-            // console.log(this.tagActiveName);
-            // 初始化以及导航最后一条记录start
-            let data = [];
-            let hoyNum = this.vtp.fildata(this.$router.options.routes,this.tagActiveName,'initName');
-            data[hoyNum[2]] = this.$route.path;
-            this.vtp.set('routerHoy',data);
-            this.vtp.rem('initName');
-            // 初始化以及导航最后一条记录end
-            // 初始化视口可视化大小start
+      },
+      mounted(){
+        this.viewHei = this.vtp.winHei(60);
+        window.onresize = () => {
             this.viewHei = this.vtp.winHei(60);
-            // this.$store.viewHei = this.viewHei;
-            // this.vtp.set('indexViewHei',this.viewHei);
-            window.onresize = () => {
-                this.viewHei = this.vtp.winHei(60);
-                // this.vtp.set('indexViewHei',this.viewHei);
-                //同步子组件内的自适应高度start
-                this.$refs.child.parMainHei = this.vtp.winHei(109);
-                this.$refs.child.$refs.children.chiAutoHeiFun(this.viewHei);
-                //同步子组件内的自适应高度end
-               // console.log(this.$refs.child.$refs.children.parViewHei);
-            }
-
-            // 初始化视口可视化大小end
-        },
-        watch:{
-            $route(to,from){
-                //监听路由变化修改TAG栏的值start
-                this.tagActiveName = this.vtp.returnRootPathStr(this.$route.path);
-                //监听路由变化修改TAG栏的值end
-                //tab切换的历史记录查询与修改start
-                let hoyData = this.vtp.get('routerHoy');
-                let hoyNum = this.vtp.fildata(this.$router.options.routes,this.vtp.returnRootPathStr(this.$route.path),'navHoy');
-                if(hoyData == null){
-                    let data = [];
-                    data[hoyNum[2]] = this.$route.path;
-                    this.vtp.set('routerHoy',data);
-                }else{
-                    if(hoyData[hoyNum[2]] != this.$route.path){
-                        hoyData[hoyNum[2]] = this.$route.path;
-                    }
-                    this.vtp.set('routerHoy',hoyData);
-                }
-                this.vtp.rem('navHoy');
-                //tab切换的历史记录查询与修改end
-            }
-        },
-        destroyed() {
-            //清除tab切换历史记录start
-            this.vtp.rem('routerHoy');
-            this.vtp.rem('indexViewHei');
-            //清除tab切换历史记录end
         }
+
+        // 初始化导航数据
+        // vtp.set('headerNav',this.headerList);
+      },
+      created(){
+        // console.log(this.$router.options.routes);
+        // this.$router.options.routes = this.headerList;
+        // console.log(pageIndex);
+        // console.log(this.$router.options.routes);
+      }
     }
 
 </script>

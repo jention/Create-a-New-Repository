@@ -51,8 +51,7 @@
         </el-aside>
         <el-main class="page-children">
             
-            <!-- <h1>这是一级导航list页面</h1> -->
-            <router-view></router-view>
+            <router-view  ref="children"></router-view>
         </el-main>
         
     </el-container>
@@ -68,7 +67,7 @@
                     parStri : [],
                     parData : [],
                     isCollapse: false,
-                    parMainHei : this.$store.viewHei-49
+                    parMainHei : this.vtp.winHei(109)
                 }
             },
             methods: {
@@ -83,10 +82,6 @@
                     this.parStri[0] =  this.vtp.getBeforeStr(this.$route.path);     //父页面路由path
                     this.parStri[2] =  this.vtp.getAfterStr(this.$route.path,0);     //子页面路由path
                     this.parData = this.$router.options.routes[this.vtp.fildata(this.$router.options.routes,this.parStri[0])[2]].children;
-                    // console.log( this.$route.path.substring(this.$route.path.lastIndexOf("/")) );
-                    // console.log(this.parStri[2]);
-                    // this.list =  navData[0]
-                    // this.vtp.rem(navData[1]);
                     // 获取二级以后导航end
                 }
             },
